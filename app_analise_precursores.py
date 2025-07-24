@@ -142,7 +142,6 @@ if uploaded_report:
                 term_norm = normalize(raw_term)
                 status_list.append({
                     "Dimensao": row["Dimensao"],
-                    "Idioma": lang_detected,
                     "Precursor": raw_term,
                     "Encontrado": "Sim" if term_norm in encontrados_norm else "Não"
                 })
