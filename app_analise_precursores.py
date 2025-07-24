@@ -109,7 +109,7 @@ if uploaded_report:
         st.warning("⚠️ Nenhum precursor foi identificado no relatório.")
     else:
         # Tabela detalhada de precursores encontrados
-        resumo = resultado.groupby(["Dimensao", "Precursor"]).size().reset_index(name="Frequência")
+        resumo = resultado.groupby(["Dimensao", "Precursor"])["Frequência"].sum().reset_index()
         st.success(f"🔍 Foram identificados {len(resumo)} precursores únicos.")
         st.dataframe(resumo)
 
