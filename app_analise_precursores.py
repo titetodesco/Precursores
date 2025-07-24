@@ -151,6 +151,9 @@ if uploaded_report:
         # ====== Downloads em Excel (.xlsx) ======
         st.markdown("#### 📥 Baixar resultados em Excel")
         
+        st.write("🔍 Debug - shape do resumo:", resumo.shape)
+        st.write("🔍 Debug - shape do df_status:", df_status.shape)
+        
         # 1. Download do resumo dos precursores encontrados
         output_resumo = io.BytesIO()
         with pd.ExcelWriter(output_resumo, engine='xlsxwriter') as writer:
