@@ -134,20 +134,19 @@ if uploaded_report:
         st.plotly_chart(fig3, use_container_width=True)
 
         # Gera planilha Sim/Não (para o idioma detectado)
-        # Usa diretamente os precursores encontrados no resultado do idioma
-        encontrados_norm = resultado["Precursor"].str.lower().str.strip().unique().tolist()
+        encontrados_norm = set(normalize(p).strip() for p in resultado["Precursor"].unique())
         status_list = []
         for _, row in precursors_df.iterrows():
             for term in str(row[lang_detected]).split(";"):
-                term_norm = term.strip().lower()
+                raw_term = term.strip()
+                term_norm = normalize(raw_term)
                 status_list.append({
                     "Dimensao": row["Dimensao"],
                     "Idioma": lang_detected,
-                    "Precursor": term.strip(),
+                    "Precursor": raw_term,
                     "Encontrado": "Sim" if term_norm in encontrados_norm else "Não"
                 })
         df_status = pd.DataFrame(status_list)
-
          
         # ====== Downloads em Excel (.xlsx) ======
         st.markdown("#### 📥 Baixar resultados em Excel")
