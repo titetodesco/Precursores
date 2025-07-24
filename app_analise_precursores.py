@@ -68,6 +68,7 @@ st.sidebar.info("A planilha de precursores deve estar disponível no GitHub.")
 # Carrega precursores do repositório (ajuste o caminho se for diferente)
 PRECURSOR_PATH = "precursores.xlsx"
 try:
+    PRECURSOR_PATH = "https://raw.githubusercontent.com/titetodesco/Precursores/main/precursores.xlsx"
     precursors_df = load_precursors_excel(PRECURSOR_PATH)
 except Exception as e:
     st.error(f"Erro ao carregar precursores: {e}")
