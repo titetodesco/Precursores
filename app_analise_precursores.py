@@ -10,6 +10,7 @@ from fuzzywuzzy import fuzz
 import unicodedata
 from langdetect import detect
 import os
+import io
 
 # ---- Funções auxiliares ----
 
@@ -132,27 +133,6 @@ if uploaded_report:
         fig3 = px.sunburst(resumo, path=["Dimensao", "Precursor"], values="Frequência", title="Distribuição de Precursores por Dimensão")
         st.plotly_chart(fig3, use_container_width=True)
 
-        # Downloads
-        st.markdown("#### 📥 Baixar resultados")
-        st.download_button("Baixar resumo (CSV)", data=resumo.to_csv(index=False), file_name="precursores_resumo.csv", mime="text/csv")
-
-        # Planilha Sim/Não
-        encontrados_norm = resultado["Precursor"].str.lower().str.strip().unique().tolist()
-        status_list = []
-        for _, row in precursors_df.iterrows():
-            for lang in ["PT", "EN"]:
-                for term in str(row[lang]).split(";"):
-                    term_norm = term.strip().lower()
-                    status_list.append({
-                        "Dimensao": row["Dimensao"],
-                        "Idioma": lang,
-                        "Precursor": term.strip(),
-                        "Encontrado": "Sim" if term_norm in encontrados_norm else "Não"
-                    })
-        df_status = pd.DataFrame(status_list)
-        st.download_button("Baixar planilha Sim/Não (CSV)", data=df_status.to_csv(index=False), file_name="status_precursores.csv", mime="text/csv")
-        import io
-
         # --- Download do resumo (EXCEL) ---
         output_resumo = io.BytesIO()
         with pd.ExcelWriter(output_resumo, engine='xlsxwriter') as writer:
@@ -176,7 +156,6 @@ if uploaded_report:
             file_name="status_precursores.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
-
 else:
     st.info("Faça upload do relatório (.pdf ou .docx) para iniciar a análise.")
 
