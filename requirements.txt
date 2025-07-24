@@ -10,3 +10,4 @@ pdfplumber
 fuzzywuzzy
 python-Levenshtein
 langdetect
+xlsxwriter
