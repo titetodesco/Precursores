@@ -1,0 +1,12 @@
+streamlit
+pandas
+matplotlib
+seaborn
+plotly
+squarify
+openpyxl
+python-docx
+pdfplumber
+fuzzywuzzy
+python-Levenshtein
+langdetect
