@@ -114,11 +114,12 @@ if uploaded_report:
         st.dataframe(resumo)
 
         # Gráfico de barras
-        st.subheader("📊 Frequência de Precursores por Dimensão")
+        df_freq = resumo.groupby("Dimensao")["Frequência"].sum().reset_index()
         fig1, ax1 = plt.subplots()
-        sns.barplot(x="Dimensao", y="Frequência", data=resumo, ax=ax1)
+        sns.barplot(x="Dimensao", y="Frequência", data=df_freq, ax=ax1)
         ax1.set_title("Frequência de Precursores por Dimensão")
         st.pyplot(fig1)
+
 
         # Mapa de Árvore (Treemap)
         st.subheader("🌳 Mapa de Árvore - Precursores por Dimensão")
