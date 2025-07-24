@@ -172,5 +172,5 @@ else:
 
 # Rodapé
 st.markdown("---")
-st.markdown("App desenvolvido por [Seu Nome]. Baseado no dicionário de precursores HTO.")
+st.markdown("App desenvolvido por Tite Todesco. Baseado no dicionário de precursores HTO.")
 
