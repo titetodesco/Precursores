@@ -90,7 +90,7 @@ if uploaded_report:
         st.stop()
 
     st.markdown("#### 🔹 Exemplo do texto extraído")
-    st.code(text[:100] + "..." if len(text) > 100 else text)
+    st.code(text[:300] + "..." if len(text) > 300 else text)
 
     # Detecta idioma principal
     try:
