@@ -134,7 +134,7 @@ if uploaded_report:
         st.plotly_chart(fig3, use_container_width=True)
 
         # Gera planilha Sim/Não (para o idioma detectado)
-        encontrados_norm = resumo["Precursor"].str.lower().str.strip().unique().tolist()
+        encontrados_norm = resultado["Precursor"].str.lower().str.strip().unique().tolist()
         status_list = []
         for _, row in precursors_df.iterrows():
             for term in str(row[lang_detected]).split(";"):
