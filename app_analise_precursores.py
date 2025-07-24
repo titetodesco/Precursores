@@ -133,9 +133,7 @@ if uploaded_report:
         fig3 = px.sunburst(resumo, path=["Dimensao", "Precursor"], values="Frequência", title="Distribuição de Precursores por Dimensão")
         st.plotly_chart(fig3, use_container_width=True)
 
-    # ... gráficos e demais análises acima ...
-
-        # Gera planilha Sim/Não para todos os precursores (só do idioma detectado)
+        # Gera planilha Sim/Não (para o idioma detectado)
         encontrados_norm = resumo["Precursor"].str.lower().str.strip().unique().tolist()
         status_list = []
         for _, row in precursors_df.iterrows():
@@ -148,7 +146,7 @@ if uploaded_report:
                     "Encontrado": "Sim" if term_norm in encontrados_norm else "Não"
                 })
         df_status = pd.DataFrame(status_list)
-    
+         
         # ====== Downloads em Excel (.xlsx) ======
         st.markdown("#### 📥 Baixar resultados em Excel")
         
