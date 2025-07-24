@@ -133,6 +133,22 @@ if uploaded_report:
         fig3 = px.sunburst(resumo, path=["Dimensao", "Precursor"], values="Frequência", title="Distribuição de Precursores por Dimensão")
         st.plotly_chart(fig3, use_container_width=True)
 
+    # ... gráficos e demais análises acima ...
+
+        # Gera planilha Sim/Não para todos os precursores (só do idioma detectado)
+        encontrados_norm = resumo["Precursor"].str.lower().str.strip().unique().tolist()
+        status_list = []
+        for _, row in precursors_df.iterrows():
+            for term in str(row[lang_detected]).split(";"):
+                term_norm = term.strip().lower()
+                status_list.append({
+                    "Dimensao": row["Dimensao"],
+                    "Idioma": lang_detected,
+                    "Precursor": term.strip(),
+                    "Encontrado": "Sim" if term_norm in encontrados_norm else "Não"
+                })
+        df_status = pd.DataFrame(status_list)
+    
         # ====== Downloads em Excel (.xlsx) ======
         st.markdown("#### 📥 Baixar resultados em Excel")
         
@@ -142,7 +158,7 @@ if uploaded_report:
             resumo.to_excel(writer, index=False, sheet_name='Resumo')
             output_resumo.seek(0)
             st.download_button(label="Baixar resumo (Excel)", data=output_resumo, file_name="precursores_resumo.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-         )
+        )
         
         # 2. Download da planilha Sim/Não
         output_status = io.BytesIO()
