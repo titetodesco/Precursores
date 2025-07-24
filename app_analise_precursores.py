@@ -133,26 +133,28 @@ if uploaded_report:
         fig3 = px.sunburst(resumo, path=["Dimensao", "Precursor"], values="Frequência", title="Distribuição de Precursores por Dimensão")
         st.plotly_chart(fig3, use_container_width=True)
 
-        # --- Download do resumo (EXCEL) ---
-        output_status = io.BytesIO()
-        with pd.ExcelWriter(output_status, engine='xlsxwriter') as writer:
-            df_status.to_excel(writer, index=False, sheet_name='Status')
-        output_status.seek(0)
+        # ====== Downloads em Excel (.xlsx) ======
+        st.markdown("#### 📥 Baixar resultados em Excel")
+        
+        # 1. Download do resumo dos precursores encontrados
+        output_resumo = io.BytesIO()
+        with pd.ExcelWriter(output_resumo, engine='xlsxwriter') as writer:
+            resumo.to_excel(writer, index=False, sheet_name='Resumo')
+        output_resumo.seek(0)
         st.download_button(
-            "Baixar planilha Sim/Não (Excel)",
-            data=output_status,
-            file_name="status_precursores.xlsx",
+            label="Baixar resumo (Excel)",
+            data=output_resumo,
+            file_name="precursores_resumo.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
-
         
-        # --- Download da planilha Sim/Não (EXCEL) ---
+        # 2. Download da planilha Sim/Não
         output_status = io.BytesIO()
         with pd.ExcelWriter(output_status, engine='xlsxwriter') as writer:
             df_status.to_excel(writer, index=False, sheet_name='Status')
         output_status.seek(0)
         st.download_button(
-            label="📥 Baixar planilha Sim/Não (Excel)",
+            label="Baixar planilha Sim/Não (Excel)",
             data=output_status,
             file_name="status_precursores.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
