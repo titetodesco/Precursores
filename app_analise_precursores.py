@@ -35,24 +35,28 @@ def normalize(text):
     text = "".join([c for c in text if not unicodedata.combining(c)])
     return text.lower()
 
-def fuzzy_match_terms(text, precursors_df, threshold=75):
+def fuzzy_match_terms_count(text, precursors_df, threshold=75):
     import re
     normalized_text = normalize(text)
-    sentences = re.split(r'[.!?]', normalized_text)
     results = []
     for _, row in precursors_df.iterrows():
         for lang in ["PT", "EN"]:
             for term in str(row[lang]).split(";"):
                 term = normalize(term.strip())
-                for sentence in sentences:
+                # Conta quantas vezes o termo ocorre de forma aproximada no texto
+                count = 0
+                for sentence in re.split(r'[.!?]', normalized_text):
                     if fuzz.partial_ratio(term, sentence.strip()) >= threshold:
-                        results.append({
-                            "Precursor": term,
-                            "Dimensao": row["Dimensao"],
-                            "Idioma": lang
-                        })
-                        break
+                        count += 1
+                if count > 0:
+                    results.append({
+                        "Precursor": term,
+                        "Dimensao": row["Dimensao"],
+                        "Idioma": lang,
+                        "Frequência": count
+                    })
     return pd.DataFrame(results)
+
 
 # ---- App Streamlit ----
 
@@ -99,7 +103,7 @@ if uploaded_report:
 
     # Faz o matching
     st.info("Analisando o relatório, aguarde alguns segundos...")
-    resultado = fuzzy_match_terms(text, precursors_df, threshold=threshold)
+    resultado = fuzzy_match_terms_count(text, precursors_df, threshold=threshold)
 
     if resultado.empty:
         st.warning("⚠️ Nenhum precursor foi identificado no relatório.")
