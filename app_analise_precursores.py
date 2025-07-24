@@ -151,6 +151,32 @@ if uploaded_report:
                     })
         df_status = pd.DataFrame(status_list)
         st.download_button("Baixar planilha Sim/Não (CSV)", data=df_status.to_csv(index=False), file_name="status_precursores.csv", mime="text/csv")
+        import io
+
+        # --- Download do resumo (EXCEL) ---
+        output_resumo = io.BytesIO()
+        with pd.ExcelWriter(output_resumo, engine='xlsxwriter') as writer:
+            resumo.to_excel(writer, index=False, sheet_name='Resumo')
+        output_resumo.seek(0)
+        st.download_button(
+            label="📥 Baixar resumo (Excel)",
+            data=output_resumo,
+            file_name="precursores_resumo.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+        
+        # --- Download da planilha Sim/Não (EXCEL) ---
+        output_status = io.BytesIO()
+        with pd.ExcelWriter(output_status, engine='xlsxwriter') as writer:
+            df_status.to_excel(writer, index=False, sheet_name='Status')
+        output_status.seek(0)
+        st.download_button(
+            label="📥 Baixar planilha Sim/Não (Excel)",
+            data=output_status,
+            file_name="status_precursores.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+
 else:
     st.info("Faça upload do relatório (.pdf ou .docx) para iniciar a análise.")
 
